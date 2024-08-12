@@ -1,0 +1,17 @@
+hall of fame crawler for new scraps
+	- find player with new items to collection
+	- kill attack that player (double enter)
+	- continue with scrolling
+	- find new player with new items to collection
+	- wait for new attack (attacks are ready each 10 minutes)
+	- attack player
+	
+arena fighter
+	- select weakest player (main stat + vitality)
+	- kill weakest player
+	- wait 10 minutes until new attack
+
+pet fighter
+	- attack on player 1
+	- wait 15 minutes
+	- attack on player 2 etc
