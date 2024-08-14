@@ -1,6 +1,5 @@
-import keyboard
-
 from utils.timer import Timer
+from utils.window_size import get_arena_cropbox, get_full_window_size
 from album import Album
 
 
@@ -14,8 +13,9 @@ def main():
 
     # init
     timer = Timer(sleep_duration=5)
+    app_screen_size = get_full_window_size()
     position = 10000
-    album = Album(position)
+    album = Album(screen_size=app_screen_size, position=position)
 
     # main loop
     while True:
