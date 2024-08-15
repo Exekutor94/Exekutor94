@@ -1,5 +1,5 @@
 from utils.timer import Timer
-from utils.window_size import get_arena_cropbox, get_full_window_size
+from utils.window_size import get_full_window_size
 from album import Album
 
 
@@ -14,7 +14,7 @@ def main():
     # init
     timer = Timer(sleep_duration=5)
     app_screen_size = get_full_window_size()
-    position = 10000
+    position = 50006
     album = Album(screen_size=app_screen_size, position=position)
 
     # main loop
@@ -23,7 +23,6 @@ def main():
         if timer.is_arena_ready():
             searching_time = album.find_and_kill_player()
             timer.restart_arena_timer()
-            print(searching_time)
             timer.redute_timer(searching_time)
             
         # wait until next iteration

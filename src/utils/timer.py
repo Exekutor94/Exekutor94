@@ -23,6 +23,7 @@ class Timer:
         self.redute_timer(duration)
 
     def redute_timer(self, duration):
+        self.iterator = 0
         self.arena_remaining_time -= duration
         if self.arena_remaining_time < 0:
             self.arena_remaining_time = 0
