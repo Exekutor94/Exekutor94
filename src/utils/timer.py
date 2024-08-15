@@ -23,7 +23,6 @@ class Timer:
         self.redute_timer(duration)
 
     def redute_timer(self, duration):
-        self.iterator = 0
         self.arena_remaining_time -= duration
         if self.arena_remaining_time < 0:
             self.arena_remaining_time = 0
@@ -32,11 +31,12 @@ class Timer:
         return self.arena_remaining_time == 0
     
     def restart_arena_timer(self):
+        self._restart_iterator()
         self.arena_remaining_time = self.arena_total_time
 
     def print_remaining_time(self):
         if self.iterator == 0:
-            self.iterator = self.max_iterator
+            self._restart_iterator()
             print("🔚🎹\t Hold 'q' or 'esc' to exit program")
             if self.arena_remaining_time == 0:
                 print("🤺✅\tAttack is ready!")
@@ -51,7 +51,10 @@ class Timer:
                     if self.arena_remaining_time == 1:
                         suffix = suffix[:-1]
                 time_of_attack = datetime.datetime.now() + datetime.timedelta(seconds=self.arena_remaining_time)
-                print(f"🤺❌\tAttack will be rady in {suffix}! ({time_of_attack.strftime('%H:%M:%S')})")
+                print(f"🤺❌\tAttack will be ready in {suffix}! ({time_of_attack.strftime('%H:%M:%S')})")
             print()
         else:
             self.iterator -= 1
+    
+    def _restart_iterator(self):
+        self.iterator = self.max_iterator

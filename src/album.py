@@ -16,7 +16,7 @@ class Album:
         self.config = config
         self.old_image_crop = None
         self.speed = 1
-        self.min_diff_scrap = 30
+        self.min_diff_scrap = 20
         # images
         init_crop_img = crop_screenshot(self.screen_size, self.cropbox)
         self.black_bg_img = None        
@@ -35,7 +35,7 @@ class Album:
     def _find_player(self):
         t_before = time()
         sleep(self.speed*3)
-        for iter in range(1000):
+        for iter in range(100):
             if keyboard.is_pressed("q") or keyboard.is_pressed("esc"):
                 break
             base_image_crop = crop_and_mask_screenshot(self.screen_size, self.cropbox, self.black_bg_img, self.mask_img)
@@ -52,19 +52,25 @@ class Album:
                 base_image_crop = crop_and_mask_screenshot(self.screen_size, self.cropbox, self.black_bg_img, self.mask_img)
             # Check next player
             self.old_image_crop = base_image_crop
-            base_image_crop.save(f"DEBUG/base_image_{iter}.png")
-            for k in range(3):
-                sleep(self.speed*0.3)
+            #base_image_crop.save(f"DEBUG/base_image_{iter}.png")
+            min_diff = 0
+            for k in range(6):
+                sleep(self.speed*0.2)
                 tmp_image_crop = crop_and_mask_screenshot(self.screen_size, self.cropbox, self.black_bg_img, self.mask_img)
-                tmp_image_crop.save(f"DEBUG/tmp_image_{iter}_{k}.png")
+                #tmp_image_crop.save(f"DEBUG/tmp_image_{iter}_{k}.png")
                 diff_img = compare(base_image_crop, tmp_image_crop)
-                print(f"Taking screenshot {k} player {self.position} - new difference {diff_img}")
+                #print(f"Taking screenshot {k} player {self.position} - new difference {diff_img}")
+                if diff_img > min_diff:
+                    min_diff = diff_img
+                if k == 2 and min_diff < 0.1:
+                    break
                 if diff_img > self.min_diff_scrap:
                     t_after = time()
                     seconds = math.ceil(t_after - t_before)
-                    print(f"🤺🔍✅\tNew player with scrap was found! Searching time: {seconds} seconds. Position HoF: {self.position} ({iter}/1000)")
+                    print(f"🤺🔍✅\tNew player with scrap was found! Searching time: {seconds} seconds. HoF pos: {self.position} ({iter}/100)")
                     return (True, seconds)  # found, searching time
             if iter % 20 == 0:
+                print("🔚🎹\t Hold 'q' or 'esc' to exit program")
                 print(f"🤺🔍❌\tNew player with scrap not found ({iter}/1000)")
             self._move_to_next_player()
         t_after = time()
@@ -80,9 +86,9 @@ class Album:
 
     def _attack(self):
         for _ in range(4):
-            #keyboard.press_and_release("enter")
+            keyboard.press_and_release("enter")
             sleep(1)
-        print("Player killed")
+        print(f"🤺💀✅\tPlayer {self.position} killed!")
 
     def find_and_kill_player(self):
         found, _ = self._find_player()
